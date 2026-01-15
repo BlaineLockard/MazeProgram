@@ -3,6 +3,8 @@ package com.blaine.maze;
 import com.blaine.maze.cell.Cell;
 import com.blaine.maze.util.Consts;
 import com.blaine.maze.util.Position;
+import com.blaine.maze.util.Utils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -14,28 +16,39 @@ public class Maze {
 
     protected Cell[][] maze;
 
-    protected float solveTime = 0.0f;
-
     protected String filePath;
+
+    protected MazeSolver solver;
+
+    protected Position start;
+    protected Position end;
+
+    protected float solveTime = -1.0f;
 
 
     public Maze(){
         rows = Consts.DEFAULT_ROWS;
         cols = Consts.DEFAULT_COLUMNS;
         maze = new Cell[rows][cols];
+        filePath = Utils.getFilePath();
     }
 
     public Maze(int rows, int cols){
         this.rows = rows;
         this.cols = cols;
         maze = new Cell[rows][cols];
+        filePath = Utils.getFilePath();
     }
 
-    public Maze(String filepath){
-        this.filePath = filepath;
+    public Maze(String filePath) throws IOException{
+        if(Utils.hasExtension(filePath, "maze")) {
+            this.filePath = filePath;
+        }
+        else
+            throw new IOException("File path \"" + filePath + "\" is not a valid maze path.");
     }
 
-    public void readFile() throws IOException{
+    public void readFile() throws IOException, NumberFormatException{
         if(filePath == null)
             throw new IOException("Maze has no associated file Path");
         Scanner scanner = new Scanner(new File(filePath));
@@ -43,20 +56,35 @@ public class Maze {
         scanner.useDelimiter("[\\n,]");
         this.rows = scanner.nextInt();
         this.cols = scanner.nextInt();
+        maze = new Cell[rows][cols];
 
         solveTime = Float.parseFloat(scanner.next());
 
-        maze = MazeFileReader.createCellMatrixFromScanner(rows, cols, scanner);
-
+        MazeFileReader.createCellMatrix(this, scanner);
     }
 
-    public void addCell(Cell newCell){
-        Position pos = newCell.getPosition();
-        maze[pos.row][pos.col] = newCell;
+    public void writeToFile(){
+        if (!Utils.hasExtension(filePath, "maze"))
+            filePath = Utils.getFilePath();
+        MazeFileWriter.writeMazeToFile(this);
     }
-    public Cell getCell(Position position){
-        return maze[position.row][position.col];
+
+    public void writeToFile(String filePath) throws IOException{
+        this.filePath = filePath;
+        if (!Utils.hasExtension(filePath, "maze"))
+            throw new IOException("File path \"" + filePath + "\" is not a valid maze path.");
+        MazeFileWriter.writeMazeToFile(this);
     }
+
+    public boolean binarySolve(){
+        solveTime = MazeSolver.binarySearch(this);
+        if(solveTime == -1.0f)
+            return false;
+        else if(solveTime < 0.01)
+            solveTime = 0.01f;
+        return true;
+    }
+
 
     public String toString(){
         StringBuilder mazeString = new StringBuilder();
@@ -120,6 +148,13 @@ public class Maze {
         return mazeString.toString();
     }
 
+    public void addCell(Cell newCell){
+        Position pos = newCell.getPosition();
+        maze[pos.row][pos.col] = newCell;
+    }
+    public Cell getCell(Position position){
+        return maze[position.row][position.col];
+    }
 
     public int getRows() {
         return rows;
@@ -133,4 +168,27 @@ public class Maze {
         return solveTime;
     }
 
+    public Position getStart() {
+        return start;
+    }
+
+    public void setStart(Position start) {
+        this.start = start;
+    }
+
+    public Position getEnd() {
+        return end;
+    }
+
+    public void setEnd(Position end) {
+        this.end = end;
+    }
+
+    public String getFilePath(){
+        return filePath;
+    }
+
+    public void setFilePath(String path){
+        this.filePath = path;
+    }
 }

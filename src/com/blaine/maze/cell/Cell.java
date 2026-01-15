@@ -13,10 +13,10 @@ public class Cell {
 
     private float weight = 0.0f;
 
-    private Position northNeighbor;
-    private Position southNeighbor;
-    private Position eastNeighbor;
-    private Position westNeighbor;
+    private Position northNeighbor = null;
+    private Position southNeighbor = null;
+    private Position eastNeighbor = null;
+    private Position westNeighbor = null;
 
 
 
