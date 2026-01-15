@@ -15,5 +15,9 @@ public class Position {
         this.col = col;
     }
 
+    public String toString(){
+        return "(" + row + ", " + col + ")";
+    }
+
 
 }

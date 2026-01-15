@@ -3,7 +3,6 @@ package com.blaine.maze;
 import com.blaine.maze.cell.Cell;
 import com.blaine.maze.util.Consts;
 import com.blaine.maze.util.Position;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -44,17 +43,16 @@ public class Maze {
         scanner.useDelimiter("[\\n,]");
         this.rows = scanner.nextInt();
         this.cols = scanner.nextInt();
-        maze = new Cell[rows][cols];
 
         solveTime = Float.parseFloat(scanner.next());
 
-        MazeFileReader.createMazeWithScanner(this, scanner);
+        maze = MazeFileReader.createCellMatrixFromScanner(rows, cols, scanner);
 
-        scanner.close();
     }
 
     public void addCell(Cell newCell){
-        maze[newCell.getPosition().row][newCell.getPosition().col] = newCell;
+        Position pos = newCell.getPosition();
+        maze[pos.row][pos.col] = newCell;
     }
     public Cell getCell(Position position){
         return maze[position.row][position.col];
@@ -134,4 +132,5 @@ public class Maze {
     public float getSolveTime() {
         return solveTime;
     }
+
 }

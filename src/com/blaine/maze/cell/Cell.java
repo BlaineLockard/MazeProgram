@@ -1,7 +1,6 @@
 package com.blaine.maze.cell;
 
 import com.blaine.maze.util.Position;
-
 import java.util.ArrayList;
 
 public class Cell {
@@ -14,10 +13,10 @@ public class Cell {
 
     private float weight = 0.0f;
 
-    private Cell northNeighbor;
-    private Cell southNeighbor;
-    private Cell eastNeighbor;
-    private Cell westNeighbor;
+    private Position northNeighbor;
+    private Position southNeighbor;
+    private Position eastNeighbor;
+    private Position westNeighbor;
 
 
 
@@ -48,13 +47,13 @@ public class Cell {
         if(partOfPath)
             returnString.append("is part of path, ");
 
-        returnString.append("weight of " + weight);
+        returnString.append("weight of ").append(weight);
 
         return returnString.toString();
     }
 
-    public ArrayList<Cell> getNeighbors(){
-        ArrayList<Cell> neighbors = new ArrayList<>();
+    public ArrayList<Position> getNeighbors(){
+        ArrayList<Position> neighbors = new ArrayList<>();
         if (northNeighbor != null) neighbors.add(northNeighbor);
         if (southNeighbor != null) neighbors.add(southNeighbor);
         if (eastNeighbor != null) neighbors.add(eastNeighbor);
@@ -96,19 +95,19 @@ public class Cell {
         return partOfPath;
     }
 
-    public Cell getNorthNeighbor() {
+    public Position getNorthNeighbor() {
         return northNeighbor;
     }
 
-    public Cell getSouthNeighbor() {
+    public Position getSouthNeighbor() {
         return southNeighbor;
     }
 
-    public Cell getEastNeighbor() {
+    public Position getEastNeighbor() {
         return eastNeighbor;
     }
 
-    public Cell getWestNeighbor() {
+    public Position getWestNeighbor() {
         return westNeighbor;
     }
 
@@ -140,19 +139,19 @@ public class Cell {
         this.partOfPath = partOfPath;
     }
 
-    public void setNorthNeighbor(Cell northNeighbor) {
+    public void setNorthNeighbor(Position northNeighbor) {
         this.northNeighbor = northNeighbor;
     }
 
-    public void setSouthNeighbor(Cell southNeighbor) {
+    public void setSouthNeighbor(Position southNeighbor) {
         this.southNeighbor = southNeighbor;
     }
 
-    public void setEastNeighbor(Cell eastNeighbor) {
+    public void setEastNeighbor(Position eastNeighbor) {
         this.eastNeighbor = eastNeighbor;
     }
 
-    public void setWestNeighbor(Cell westNeighbor) {
+    public void setWestNeighbor(Position westNeighbor) {
         this.westNeighbor = westNeighbor;
     }
 }
